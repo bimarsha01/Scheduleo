@@ -2,6 +2,7 @@ import { CustomerModel } from '../models/users.model'
 import bcrypt from 'bcryptjs'
 import { Signinvalidation, Signupvalidation } from '../validation/validateUser.validation'
 import createStatus from 'http-status-codes'
+import { attachedcookiesToResponse } from '../cookies/cookie.cookies'
 
 export const Signupvalidation = async (req, res, next) => {
     try {
@@ -98,5 +99,6 @@ export const Signinvalidation = async (req, res, next) => {
             checkemail
         }
     })
+    
 
 }
