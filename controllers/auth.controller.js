@@ -1,8 +1,9 @@
-import { CustomerModel } from '../models/users.model'
+import { CustomerModel } from '../models/users.model.js'
 import bcrypt from 'bcryptjs'
-import { Signinvalidation, Signupvalidation } from '../validation/validateUser.validation'
+// import { Signinvalidation, Signupvalidation } from '../validation/validateUser.validation.js'
 import createStatus from 'http-status-codes'
-import { attachedcookiesToResponse } from '../cookies/cookie.cookies'
+import { attachedcookiesToResponse } from '../cookies/cookie.cookies.js'
+import { SendVerificationEmail } from '../email/verify.email.js'
 
 export const Signupvalidation = async (req, res, next) => {
     try {
@@ -36,9 +37,17 @@ export const Signupvalidation = async (req, res, next) => {
         if (newUser !== undefined || null) {
             const created = newUser.save();
             console.log(created);
+            const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+            newUser.verificationToken = verificationCode;
+            newUser.VerificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
+            await newUser.save();
+
+            await SendVerificationEmail(newUser.email, verificationCode);
             return res.status(createStatus.ACCEPTED).json({
                 success: true,
                 message: "New user has been created"
+
             })
         }
         else {
@@ -99,6 +108,7 @@ export const Signinvalidation = async (req, res, next) => {
             checkemail
         }
     })
-    
+
 
 }
+// export default authRoutes

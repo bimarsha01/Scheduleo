@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { createaccesstoken, createrefreshtoken } from '../tokens/token.tokens';
+import { createaccesstoken, createrefreshtoken } from '../tokens/token.tokens.js';
 
 
 export const attachedcookiesToResponse = (res, user) => {
