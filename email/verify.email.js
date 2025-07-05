@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import { CustomerModel } from '../models/users.model.js';
-import Statuscodes from 'http-status-codes'
+import createStatus from 'http-status-codes'
 dotenv.config();
 
 export async function SendVerificationEmail(toEmail, verificationCode) {
@@ -19,9 +19,6 @@ export async function SendVerificationEmail(toEmail, verificationCode) {
         html: `
       <p>Do not share this code with anyone. If you did not request this, please ignore.</p>
       <h3>Your verification code is: ${verificationCode}</h3>`
-
-
-
     };
     let info = await transporter.sendMail(mailOptions);
     console.log("Email sent : " + info.response);
@@ -43,12 +40,17 @@ export const verifycode = async (req, res, next) => {
         if (Vemail.VerificationExpiry < new Date())
             return res.status(401).json({ error: "Code has been expired" });
 
+        return res.status(201).json({
+            success: true,
+            message: "Code matched"
+        })
+
         Vemail.isverified = true;
         Vemail.verificationToken = undefined;
         Vemail.VerificationExpiry = undefined;
         await Vemail.save();
     } catch (err) {
-        return res.status(Statuscodes.BAD_REQUEST).json({
+        return res.status(createStatus.BAD_REQUEST).json({
             success: false,
             message: `Error: ${err}`
         })

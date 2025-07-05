@@ -4,8 +4,11 @@ import bcrypt from 'bcryptjs'
 import createStatus from 'http-status-codes'
 import { attachedcookiesToResponse } from '../cookies/cookie.cookies.js'
 import { SendVerificationEmail } from '../email/verify.email.js'
+import joi from 'joi';
+import { Signupvalidation, Signinvalidation } from '../validation/validateUser.validation.js'
+// import { verifycode } from '../email/verify.email.js'
 
-export const Signupvalidation = async (req, res, next) => {
+export const signuphandler = async (req, res, next) => {
     try {
         const { error } = Signupvalidation.validateAsync(req.body);
         if (error)
@@ -15,15 +18,14 @@ export const Signupvalidation = async (req, res, next) => {
             })
 
         const { name, email, password, phoneNo } = req.body;
-        const uniqueEmail = await CustomerModel.aggregate([
-            { $match: { email: email } }
-        ])
-        if (uniqueEmail)
-            return res.status(createStatus.BAD_GATEWAY).json({
+        const existingUser = await CustomerModel.findOne({ email: email });
 
+        if (existingUser)
+            return res.status(createStatus.BAD_GATEWAY).json({
                 success: false,
                 message: "Email already exists"
             });
+
         const hash = await bcrypt.genSalt(10);
         const hashpw = await bcrypt.hash(password, hash);
 
@@ -35,8 +37,9 @@ export const Signupvalidation = async (req, res, next) => {
             phoneNo: phoneNo
         });
         if (newUser !== undefined || null) {
-            const created = newUser.save();
-            console.log(created);
+            // const created = newUser.save();
+            // console.log(created);
+
             const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
             newUser.verificationToken = verificationCode;
@@ -44,6 +47,12 @@ export const Signupvalidation = async (req, res, next) => {
             await newUser.save();
 
             await SendVerificationEmail(newUser.email, verificationCode);
+
+            res.status(202).json({
+                success: true,
+                message: "Verification email sent. Please check your inbox."
+            });
+
             return res.status(createStatus.ACCEPTED).json({
                 success: true,
                 message: "New user has been created"
@@ -64,7 +73,7 @@ export const Signupvalidation = async (req, res, next) => {
     }
 }
 
-export const Signinvalidation = async (req, res, next) => {
+export const signinhandler = async (req, res, next) => {
     const { error } = await Signinvalidation.validateAsync(req.body);
 
     if (error)

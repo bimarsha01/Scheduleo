@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import dns from 'dns';
 import authRoutes from './routes/auth.routes.js';
+import { Console } from 'console';
 // import taskRouter from './routes/task.routes.js';
 
 
@@ -23,6 +24,9 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
     try {
+
+        console.log(process.env.ORG_EMAIL);
+        console.log(process.env.ORG_PASS)
         await connectDB();
         app.listen(PORT, () => {
             console.log(`Server started at port ${PORT}`);
