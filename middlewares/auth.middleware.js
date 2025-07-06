@@ -1,4 +1,4 @@
-export const authorize = (req, res, next) => {
+export const isauth = (req, res, next) => {
     try {
         const token = req.cookie.accesstoken;
 
@@ -12,7 +12,7 @@ export const authorize = (req, res, next) => {
             return res.status(401).json({ error: "Token didnot matched" });
 
         req.user = { userID: decode.userID };
-
+        next();
     }
     catch (err) {
         return res.status(createStatus.ERROR).json({

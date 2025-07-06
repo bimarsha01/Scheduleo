@@ -7,6 +7,10 @@ const mybooking = new mongoose.Schema({
         ref: "Customer",
         required: true
     },
+    serviceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "service"
+    },
     bname: {
         type: string,
         maxlength: 60,
@@ -15,7 +19,7 @@ const mybooking = new mongoose.Schema({
     },
     bcategory: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Customer"
+        ref: "Category"
     },
     date: {
         type: Date,
@@ -23,7 +27,12 @@ const mybooking = new mongoose.Schema({
     },
     status: {
         type: string,
-        enum: ["pending", "confirmed", "cancelled"]
+        enum: ["pending", "confirmed", "cancelled"],
+        default: "pending"
+    },
+    timeslots: {
+        type: string,
+        required: true
     }
 },
     { timestamps: true }

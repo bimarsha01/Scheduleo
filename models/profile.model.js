@@ -37,3 +37,4 @@ const ProfileSchema = new mongoose.Schema({
 
     }
 })
+const profile = mongoose.model("profile", ProfileSchema);

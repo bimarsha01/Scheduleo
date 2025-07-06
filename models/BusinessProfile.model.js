@@ -30,7 +30,22 @@ const BusinessProfileSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
 
-        }
+        },
+        timeslots: [timeslotsSchema]
     }
 )
+const timeslotsSchema = new mongoose.Schema(
+    {
+        day: {
+            type: string,
+            enum: ["Sunay", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            required: true,
+        },
+        slots: [
+            {
+                start: String,
+                end: String
+            }
+        ]
+    })
 export const BusinessProfileModel = mongoose.model("Business", BusinessProfileSchema)
