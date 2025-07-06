@@ -14,13 +14,8 @@ const BusinessProfileSchema = new mongoose.Schema(
             minlength: 5,
             maxlength: 30,
         },
-        category: {
-            type: String,
-            enum: ['Restro', 'Hotel', 'clinic', 'salon'],
-            required: true,
-            default: null
-        },
         services: [String],
+
         location: {
             type: String,
             required: true,
@@ -30,6 +25,11 @@ const BusinessProfileSchema = new mongoose.Schema(
         working: {
             open: Date(),
             close: Date()
+        },
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
+
         }
     }
 )
