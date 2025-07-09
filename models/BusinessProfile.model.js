@@ -14,8 +14,6 @@ const BusinessProfileSchema = new mongoose.Schema(
             minlength: 5,
             maxlength: 30,
         },
-        services: [String],
-
         location: {
             type: String,
             required: true,
@@ -26,10 +24,21 @@ const BusinessProfileSchema = new mongoose.Schema(
             open: Date(),
             close: Date()
         },
+        type: {
+            type: String,
+            enum: ['salon', 'clinic', 'resturant'],
+            required: true
+
+        },
         category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
 
+        },
+        baserate: {
+            type: number,
+            required: false,
+            default: 1050
         },
         timeslots: [timeslotsSchema]
     }

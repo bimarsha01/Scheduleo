@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose from "mongoose";
 
 const ServiceSchema = new mongoose.Schema(
@@ -22,6 +23,17 @@ const ServiceSchema = new mongoose.Schema(
         BusinessId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Business"
+        },
+        noOfPeople: {
+            type: string,
+            required: true,
+            default: 1
+        },
+        Date: {
+            type: Date
+        },
+        time: {
+            type: string
         }
     },
     { timestamps: true }
