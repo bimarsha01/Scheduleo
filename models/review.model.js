@@ -1,4 +1,4 @@
-import { string } from "joi";
+
 import mongoose from "mongoose";
 
 
@@ -12,11 +12,11 @@ const reviewSchema = new mongoose.Schema({
         ref: "Booking"
     },
     title: {
-        type: string,
+        type: String,
         required: true
     },
     description: {
-        type: string,
+        type: String,
         required: true,
         maxlength: 100,
         minlength: 5

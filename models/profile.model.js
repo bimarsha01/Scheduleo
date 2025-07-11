@@ -1,4 +1,3 @@
-import { boolean, string } from "joi";
 import mongoose from "mongoose";
 
 const ProfileSchema = new mongoose.Schema({
@@ -16,7 +15,7 @@ const ProfileSchema = new mongoose.Schema({
         },
         language: 'en',
         theme: {
-            type: string,
+            type: String,
             enum: ["default system", "light", "dark"],
             default: "light"
         },

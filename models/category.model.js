@@ -1,16 +1,16 @@
-import { required, string } from "joi";
+
 import mongoose from "mongoose";
 
 const category = new mongoose.Schema(
     {
 
         name: {
-            type: string,
+            type: String,
             unique: true,
             required: true
         },
         description: {
-            type: string,
+            type: String,
             maxlength: 200,
             minlength: 20,
             required: true

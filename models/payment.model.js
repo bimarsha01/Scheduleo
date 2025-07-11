@@ -1,4 +1,4 @@
-import { number, required, string } from "joi";
+
 import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema({
@@ -15,13 +15,13 @@ const paymentSchema = new mongoose.Schema({
         required: true
     },
     method: {
-        type: string,
+        type: String,
         required: true,
         enum: ["esewa", "khalti", "paypal", "G-Pay"],
         default: null
     },
     transactionId: {
-        type: string
+        type:String
     },
     transactedAt: {
         type: Date

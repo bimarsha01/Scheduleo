@@ -1,4 +1,4 @@
-import { string } from "joi";
+
 import mongoose from "mongoose";
 
 const ServiceSchema = new mongoose.Schema(
@@ -25,7 +25,7 @@ const ServiceSchema = new mongoose.Schema(
             ref: "Business"
         },
         noOfPeople: {
-            type: string,
+            type: String,
             required: true,
             default: 1
         },
@@ -33,12 +33,13 @@ const ServiceSchema = new mongoose.Schema(
             type: Date
         },
         time: {
-            type: string
+            type: String
         }
     },
     { timestamps: true }
 );
 
-export const ServiceModel = mongoose.model("Service", ServiceSchema);
+const ServiceModel = mongoose.model("Service", ServiceSchema);
+export default ServiceModel
 
 

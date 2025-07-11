@@ -1,6 +1,6 @@
 export const isauth = (req, res, next) => {
     try {
-        const token = req.cookie.accesstoken;
+        const token = req.cookies.accesstoken;
 
         if (!token)
             return res.status(404).json({
@@ -9,9 +9,9 @@ export const isauth = (req, res, next) => {
             })
         const decode = jwt.verify(token, process.env.JWT_SECRET);
         if (!decode)
-            return res.status(401).json({ error: "Token didnot matched" });
+            return res.status(401).json({ error: "INVALID OR EXPIRED TOKEN " });
 
-        req.user = { userID: decode.userID };
+        req.user = { decode };
         next();
     }
     catch (err) {

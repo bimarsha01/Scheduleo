@@ -1,4 +1,4 @@
-import { date, string } from "joi";
+
 import mongoose from "mongoose";
 
 const mybooking = new mongoose.Schema({
@@ -12,7 +12,7 @@ const mybooking = new mongoose.Schema({
         ref: "service"
     },
     bname: {
-        type: string,
+        type: String,
         maxlength: 60,
         minlength: 10,
         required: true
@@ -26,12 +26,12 @@ const mybooking = new mongoose.Schema({
         required: true,
     },
     status: {
-        type: string,
+        type: String,
         enum: ["pending", "confirmed", "cancelled"],
         default: "pending"
     },
     timeslots: {
-        type: string,
+        type: String,
         required: true
     }
 },
