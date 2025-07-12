@@ -32,8 +32,8 @@ export const create = async (req, res, next) => {
 
 
         const alreadybooked = await BookingModel.findOne({
-            customerId,
-            serviceId,
+            customer: customerId,
+            service: serviceId,
             date,
             timeslots
         })
@@ -67,7 +67,6 @@ export const create = async (req, res, next) => {
         return res.status(502).json({
             success: false,
             message: err.message
-
         })
     }
 }
