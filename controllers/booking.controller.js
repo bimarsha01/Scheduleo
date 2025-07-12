@@ -5,6 +5,7 @@ import BookingModel from "../models/mybooking.model.js";
 import { bookingValidationSchema } from "../validation/booking.validator.js";
 import { CustomerModel } from "../models/users.model.js";
 import { CategoryModel } from "../models/category.model.js";
+import { date } from "joi";
 
 export const create = async (req, res, next) => {
     try {
@@ -74,23 +75,75 @@ export const create = async (req, res, next) => {
 export const showmybookings = async (req, res, next) => {
     try {
         const customerId = req.user._id;
+        const now = new Date();
 
-        const mybookings = await BookingModel.find({ customer: customerId });
-        if (!mybookings)
-            return res.status(401).json({
-                success: false,
-                message: "not valid"
-            })
-
+        const mybookings = await BookingModel.aggregate([
+            {
+                $match: { customer: customerId }
+            },
+            {
+                $facet: {
+                    pastbookings: [
+                        {
+                            $match: { date: { $lt: now } }
+                        },
+                        { $sort: { date: -1 } },
+                        {
+                            $lookup: {
+                                from: "services",
+                                localField: "serviceId",
+                                foreignField: "_id",
+                                as: "service"
+                            }
+                        },
+                        { $unwind: "service" },
+                        {
+                            $project: {
+                                date: 1,
+                                time: 1,
+                                description: 1,
+                                occasion: 1,
+                                phoneno: 1,
+                                serviceName: "$service.Sname",
+                                servicePrice: "$service.Amount"
+                            }
+                        }
+                    ],
+                    upcomingBooking: [
+                        {
+                            $match: { date: { $gte: now } }
+                        },
+                        { $sort: { date: 1 } },
+                        {
+                            $lookup: {
+                                from: "services",
+                                localField: "service",
+                                foreignField: "_id",
+                                as: "service"
+                            }
+                        },
+                        { $unwind: "service" },
+                        {
+                            $project: {
+                                date: 1,
+                                time: 1,
+                                description: 1,
+                                occasion: 1,
+                                phoneno: 1,
+                                serviceName: "$service.Sname",
+                                servicePrice: "$service.Amount"
+                            }
+                        }
+                    ]
+                }
+            }
+        ])
         return res.status(200).json({
             success: true,
-            message: "here is the booking",
-            data: {
-                mybookings
-            }
-        })
+            data: mybookings[0]
+        });
     } catch (err) {
-        return res.status(501).json({
+        return res.status(401).json({
             success: false,
             message: err.message
         })

@@ -21,6 +21,10 @@ const mybooking = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category"
     },
+    BusinessId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Business"
+    },
     date: {
         type: Date,
         required: true,
