@@ -24,6 +24,11 @@ const BusinessProfileSchema = new mongoose.Schema(
             open: Date(),
             close: Date()
         },
+        closing: {
+            type: String,
+            enum: ['sunday', "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "none"],
+            default: "saturday"
+        },
         type: {
             type: String,
             enum: ['salon', 'clinic', 'resturant'],
