@@ -149,3 +149,57 @@ export const showmybookings = async (req, res, next) => {
         })
     }
 }
+
+export const changemybooking = async (req, res, next) => {
+    const customerId = req.user._id;
+    const { categoryId, serviceId, date, time, description, occasion, phoneno, noofPeople } = req.body
+    const { businessId } = req.params
+    const { error } = await bookingValidationSchema.validateAsync(req.body);
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message
+        });
+
+            const existingBooking = await BookingModel.findOne({
+      customer: customerId,
+      serviceId: serviceId,
+    });
+
+    if (!existingBooking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+    const allowedfields = [
+
+        "categoryId",
+        "businessId",
+        "date",
+        "time",
+        "description",
+        "occasion",
+        "phoneno",
+        "noofPeople"
+    ];
+
+    const changes = {};
+    for(fields in allowedfields){
+        if(req.body[fields] !== undefined || req.body[field]  !=existingBooking[fields])
+            changes[field] = req.body[field];
+    }
+    const updatebooking = await BookingModel.findOneAndUpdate({ customer: customerId, serviceId: serviceId }, {
+        customer: customerId,
+        service: serviceId,
+        business: businessId,
+        date,
+        time,
+        description,
+        occasion,
+        phoneno,
+        noofPeople
+    },
+        { new: true }
+    )
+}
