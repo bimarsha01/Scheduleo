@@ -1,0 +1,29 @@
+{
+  "name": "schedulo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bimarsha01/Scheduleo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/bimarsha01/Scheduleo/issues"
+  },
+  "homepage": "https://github.com/bimarsha01/Scheduleo#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookieparser": "^0.1.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.3"
+  }
+}

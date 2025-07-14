@@ -158,37 +158,36 @@ export const changemybooking = async (req, res, next) => {
     if (error)
         return res.status(400).json({
             success: false,
-            message: error.details[0].message
+            message: error.message
         });
 
-            const existingBooking = await BookingModel.findOne({
-      customer: customerId,
-      serviceId: serviceId,
-    });
+    // const existingBooking = await BookingModel.findOne({
+    //   customer: customerId,
+    //   serviceId: serviceId,
+    // });
 
-    if (!existingBooking) {
-      return res.status(404).json({
-        success: false,
-        message: "Booking not found",
-      });
-    }
-    const allowedfields = [
+    // if (!existingBooking) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Booking not found",
+    //   });
+    // const allowedfields = [
 
-        "categoryId",
-        "businessId",
-        "date",
-        "time",
-        "description",
-        "occasion",
-        "phoneno",
-        "noofPeople"
-    ];
+    //     "categoryId",
+    //     "businessId",
+    //     "date",
+    //     "time",
+    //     "description",
+    //     "occasion",
+    //     "phoneno",
+    //     "noofPeople"
+    // ];
 
-    const changes = {};
-    for(fields in allowedfields){
-        if(req.body[fields] !== undefined || req.body[field]  !=existingBooking[fields])
-            changes[field] = req.body[field];
-    }
+    // const changes = {};
+    // for(fields in allowedfields){
+    //     if(req.body[fields] !== undefined || req.body[field]  != existingBooking[fields])
+    //         changes[field] = req.body[field];
+    // }
     const updatebooking = await BookingModel.findOneAndUpdate({ customer: customerId, serviceId: serviceId }, {
         customer: customerId,
         service: serviceId,
@@ -202,4 +201,6 @@ export const changemybooking = async (req, res, next) => {
     },
         { new: true }
     )
+    console.log("updated data", updatebooking)
+    res.json(updatebooking)
 }
