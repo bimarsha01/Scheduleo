@@ -24,6 +24,10 @@ const ServiceSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Business"
         },
+        BookingId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Booking"
+        },
         noOfPeople: {
             type: String,
             required: true,

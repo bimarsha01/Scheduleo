@@ -104,8 +104,16 @@ export const showmybookings = async (req, res, next) => {
                                 description: 1,
                                 occasion: 1,
                                 phoneno: 1,
-                                serviceName: "$service.Sname",
-                                servicePrice: "$service.Amount"
+                                services: {
+                                    $map: {
+                                        input: "$services",
+                                        as: "service",
+                                        in: {
+                                            serviceName: "$$service.Sname",
+                                            servicePrice: "$$service.Amount"
+                                        }
+                                    }
+                                }
                             }
                         }
                     ],
@@ -130,8 +138,16 @@ export const showmybookings = async (req, res, next) => {
                                 description: 1,
                                 occasion: 1,
                                 phoneno: 1,
-                                serviceName: "$service.Sname",
-                                servicePrice: "$service.Amount"
+                                services: {
+                                    $map: {
+                                        input: "$services",
+                                        as: "service",
+                                        in: {
+                                            serviceName: "$$service.Sname",
+                                            servicePrice: "$$service.Amount"
+                                        }
+                                    }
+                                }
                             }
                         }
                     ]
@@ -202,5 +218,53 @@ export const changemybooking = async (req, res, next) => {
         { new: true }
     )
     console.log("updated data", updatebooking)
-    res.json(updatebooking)
+    res.json(updatebooking);
+}
+
+export const deletebooking = async (req, res, next) => {
+    try {
+        const bookingId = req.params;
+        const customerId = req.user._id;
+        const now = new Date();
+
+        if (!bookingId)
+            return res.status(401).json({
+                success: false,
+                message: "Did not found the booking"
+            });
+
+        const booking = await BookingModel.findOne({
+            _id: bookingId,
+            customer: customerId
+        })
+
+        if (!booking)
+            return res.status(404).json({
+                success: false,
+                message: "Booking not found "
+            })
+
+        if (new (booking.date) < Date.now())
+            return res.status(403).json({
+                success: false,
+                message: "Cannot delete a booking for a past date"
+            });
+
+        const deletebooking = await BookingModel.findByIdAndDelete({
+            customer: customerId,
+            _id: bookingId
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Booking deleted successfully",
+            data: deletebooking
+        });
+
+    } catch (err) {
+        return res.status(501).json({
+            success: false,
+            message: err.message
+        })
+    }
 }
