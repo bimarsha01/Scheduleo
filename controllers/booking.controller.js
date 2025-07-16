@@ -177,48 +177,49 @@ export const changemybooking = async (req, res, next) => {
             message: error.message
         });
 
-    // const existingBooking = await BookingModel.findOne({
-    //   customer: customerId,
-    //   serviceId: serviceId,
-    // });
-
-    // if (!existingBooking) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "Booking not found",
-    //   });
-    // const allowedfields = [
-
-    //     "categoryId",
-    //     "businessId",
-    //     "date",
-    //     "time",
-    //     "description",
-    //     "occasion",
-    //     "phoneno",
-    //     "noofPeople"
-    // ];
-
-    // const changes = {};
-    // for(fields in allowedfields){
-    //     if(req.body[fields] !== undefined || req.body[field]  != existingBooking[fields])
-    //         changes[field] = req.body[field];
-    // }
-    const updatebooking = await BookingModel.findOneAndUpdate({ customer: customerId, serviceId: serviceId }, {
+    const existingBooking = await BookingModel.findOne({
         customer: customerId,
-        service: serviceId,
-        business: businessId,
-        date,
-        time,
-        description,
-        occasion,
-        phoneno,
-        noofPeople
-    },
-        { new: true }
-    )
-    console.log("updated data", updatebooking)
-    res.json(updatebooking);
+        serviceId: serviceId,
+    });
+
+    if (!existingBooking) {
+        return res.status(404).json({
+            success: false,
+            message: "Booking not found",
+        });
+        const allowedfields = [
+
+            "categoryId",
+            "businessId",
+            "date",
+            "time",
+            "description",
+            "occasion",
+            "phoneno",
+            "noofPeople"
+        ];
+
+        const changes = {};
+        for (fields in allowedfields) {
+            if (req.body[fields] !== undefined || req.body[field] != existingBooking[fields])
+                changes[field] = req.body[field];
+        }
+        const updatebooking = await BookingModel.findOneAndUpdate({ customer: customerId, serviceId: serviceId }, {
+            customer: customerId,
+            service: serviceId,
+            business: businessId,
+            date,
+            time,
+            description,
+            occasion,
+            phoneno,
+            noofPeople
+        },
+            { new: true }
+        )
+        console.log("updated data", updatebooking)
+        res.json(updatebooking);
+    }
 }
 
 export const deletebooking = async (req, res, next) => {
